@@ -1,13 +1,5 @@
 from transformers import AutoModelForCausalLM, AutoProcessor, AutoTokenizer
 
-# # 저장된 로컬 모델 경로
-# model_path = "/data/clovax/pretrained_model"
-
-# # 로컬에서 로드
-# model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True).to("cuda")
-# preprocessor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
-# tokenizer = AutoTokenizer.from_pretrained(model_path)
-
 model_name = "naver-hyperclovax/HyperCLOVAX-SEED-Vision-Instruct-3B"
 revision="v0.1.0"
 model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, revision=revision).to(device="cuda")
@@ -15,8 +7,6 @@ preprocessor = AutoProcessor.from_pretrained(model_name, trust_remote_code=True,
 tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
 
 # LLM Example
-# It is recommended to use the chat template with HyperCLOVAX models.
-# Using the chat template allows you to easily format your input in ChatML style.
 chat = [
         {"role": "system", "content": "you are helpful assistant!"},
         {"role": "user", "content": "Hello, how are you?"},
@@ -26,7 +16,6 @@ chat = [
 input_ids = tokenizer.apply_chat_template(chat, return_tensors="pt", tokenize=True)
 input_ids = input_ids.to(device="cuda")
 
-# Please adjust parameters like top_p appropriately for your use case.
 output_ids = model.generate(
         input_ids,
         max_new_tokens=64,
@@ -41,7 +30,6 @@ print(tokenizer.batch_decode(output_ids)[0])
 print("=" * 80)
 
 # VLM Example
-# For image and video inputs, you can use url, local_path, base64, or bytes.
 vlm_chat = [
         {"role": "system", "content": {"type": "text", "text": "System Prompt"}},
         {"role": "user", "content": {"type": "text", "text": "User Text 1"}},
@@ -97,9 +85,7 @@ print("VLM EXAMPLE")
 print(tokenizer.batch_decode(output_ids)[0])
 print("=" * 80)
 
-
-
-'''clova x seed 3B 모델을 Gradio로 구현하여 텍스트 채팅'''
+'''clova x seed 3B 모델을 Gradio로 구현하여 단일모달(text) 채팅'''
 
 # import torch
 # from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
@@ -432,7 +418,7 @@ print("=" * 80)
 # demo.launch(server_port=5000, server_name="0.0.0.0")
 
 
-'''실시간 스트리밍으로 CLOVA X 채팅 인터페이스(Terminal) 구현'''
+'''실시간 스트리밍으로 CLOVA X 채팅 인터페이스(bash) 구현'''
 
 # import torch
 # from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor, TextIteratorStreamer
